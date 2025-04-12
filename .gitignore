@@ -1,0 +1,61 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code settings
+.vscode/
+
+# Backup & temporary files
+*~
+*.tmp
+*.bak
+*.swp
+
+# Windows image thumbnails
+Thumbs.db
+
+# Visual Studio settings
+.vs/
+
+# NuGet packages
+packages/
+*.nupkg
+# If using PackageReference
+# (can uncomment if you want to keep packages out of source)
+# !**/packages.config
+
+# DotCover
+.idea/
+*.dotCover
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# Rider
+.idea/
+
+# Local test results
+TestResults/
+
+# Web publish
+*.Publish.xml
+
+# Logs
+*.log
+
+# Auto-generated files
+Generated_Code/
+
+# Crash dumps
+*.dmp

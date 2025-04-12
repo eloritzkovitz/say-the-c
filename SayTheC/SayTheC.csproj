@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\c-icon.png" />
+    <None Remove="Icons\Instructions.png" />
+    <None Remove="Icons\Sound.png" />
+    <None Remove="Images\bicycle.png" />
+    <None Remove="Images\cake.png" />
+    <None Remove="Images\cap.png" />
+    <None Remove="Images\cat.png" />
+    <None Remove="Images\cigarette.png" />
+    <None Remove="Images\cinder.png" />
+    <None Remove="Images\cinema.png" />
+    <None Remove="Images\cinnamon.png" />
+    <None Remove="Images\circle.png" />
+    <None Remove="Images\clown.png" />
+    <None Remove="Images\coffee.png" />
+    <None Remove="Images\cow.png" />
+    <None Remove="Images\cylinder.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\c-icon.png" />
+    <Resource Include="Icons\Instructions.png" />
+    <Resource Include="Icons\Sound.png" />
+    <Resource Include="Images\cap.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Speech" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\bicycle.png" />
+    <Resource Include="Images\cake.png" />
+    <Resource Include="Images\cat.png" />
+    <Resource Include="Images\cigarette.png" />
+    <Resource Include="Images\cinder.png" />
+    <Resource Include="Images\cinema.png" />
+    <Resource Include="Images\cinnamon.png" />
+    <Resource Include="Images\circle.png" />
+    <Resource Include="Images\clown.png" />
+    <Resource Include="Images\coffee.png" />
+    <Resource Include="Images\cow.png" />
+    <Resource Include="Images\cylinder.png" />
+  </ItemGroup>  
+
+</Project>

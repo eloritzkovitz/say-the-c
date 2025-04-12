@@ -87,10 +87,10 @@
 
         <Image x:Name="btn_img"
            HorizontalAlignment="Left"
-           Height="64"
-           Margin="427,296,0,0"
+           Height="50"
+           Margin="434,304,0,0"
            VerticalAlignment="Top"
-           Width="64"
+           Width="50"
            Source="Icons\Sound.png"/>
 
         <Button x:Name="ins" Content=""
@@ -117,10 +117,10 @@
 
         <Image x:Name="btn_ins"
            HorizontalAlignment="Left"
-           Height="64"
-           Margin="663,296,0,0"
+           Height="50"
+           Margin="669,304,0,0"
            VerticalAlignment="Top"
-           Width="64"
+           Width="50"
            Source="/Icons/Instructions.png"/>
 
         <TextBlock Name="txt"

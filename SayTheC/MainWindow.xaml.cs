@@ -7,6 +7,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Speech.Synthesis;
+using Microsoft.Data.Sqlite;
+using Models;
+using Data;
 
 namespace SayTheC
 {
@@ -15,23 +18,35 @@ namespace SayTheC
     /// </summary>
     public partial class MainWindow : Window
     {
-        // List of words to choose from
-        private readonly List<string> words = new List<string>
-        {
-            "cat", "coffee", "cake", "circle", "cylinder",
-            "bicycle", "cinder", "cinema", "cinnamon",
-            "cap", "cow", "clown"
-        };
-
-        private readonly int[] map = new int[12];
-        private string currentWord = string.Empty;
+        private List<WordEntry> words = new List<WordEntry>();
+        private int[] map = [];
+        private WordEntry currentWord = new WordEntry { Word = "", ImageUrl = "" };
         private readonly Random r = new Random();
         SpeechSynthesizer synth = new SpeechSynthesizer();
 
         public MainWindow()
         {
             InitializeComponent();
+            LoadWordsFromDatabase();
             SetGame();
+        }
+
+        // Load words from database
+        private void LoadWordsFromDatabase()
+        {
+            try
+            {
+                var dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database", "words.db");
+                var repo = new WordRepository(dbPath);
+                words = repo.GetAllWords();
+                map = new int[words.Count];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load words from database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                words = new List<WordEntry>();
+                map = [];
+            }
         }
 
         // Set game to initial state
@@ -44,15 +59,14 @@ namespace SayTheC
         // Choose word from list
         public void ChooseWord()
         {
-            string selection = words[r.Next(0, words.Count)]; // Choose word                   
-            // If first time or after a full cycle -> choose selection
+            var selection = words[r.Next(0, words.Count)];
             if (currentWord == null || map.All(o => o == map[0]))
             {
                 currentWord = selection;
             }
             else
             {
-                // Otherwise, while the new selection has a larger use count -> choose another word
+                // Ensure the new word is not the same as the current word
                 while (map[words.IndexOf(selection)] >= map[words.IndexOf(currentWord)])
                 {
                     selection = words[r.Next(0, words.Count)];
@@ -65,15 +79,17 @@ namespace SayTheC
         // Apply visual changes
         public void ApplyVisuals()
         {
-            var color = Brushes.Black; // Default color
+            txt.Inlines.Clear();
+            var color = Brushes.Black;
 
-            // Apply text colors
-            for (int i = 0; i < currentWord.Length; i++)
+            for (int i = 0; i < currentWord.Word.Length; i++)
             {
-                char letter = currentWord[i];
+                char letter = currentWord.Word[i];
                 if (letter == 'c' || letter == 'C')
                 {
-                    if (currentWord[i + 1] == 'e' || currentWord[i + 1] == 'i' || currentWord[i + 1] == 'y')
+                    // Choose cyan for soft C, red for hard C
+                    if (i + 1 < currentWord.Word.Length &&
+                        (currentWord.Word[i + 1] == 'e' || currentWord.Word[i + 1] == 'i' || currentWord.Word[i + 1] == 'y'))
                     {
                         color = Brushes.Cyan;
                     }
@@ -81,14 +97,18 @@ namespace SayTheC
                         color = Brushes.Red;
 
                     txt.Inlines.Add(new Run(letter.ToString()) { Foreground = color });
-                    txt.Inlines.Add(new Run(currentWord[i + 1].ToString()) { Foreground = color });
-                    i++;
+                    if (i + 1 < currentWord.Word.Length)
+                    {
+                        txt.Inlines.Add(new Run(currentWord.Word[i + 1].ToString()) { Foreground = color });
+                        i++;
+                    }
                 }
                 else
                     txt.Inlines.Add(new Run(letter.ToString()) { Foreground = Brushes.Black });
             }
-            // Apply image source
-            img.Source = new BitmapImage(new Uri(@"\Images\" + currentWord + ".png", UriKind.Relative));
+
+            // Use ImageUrl
+            img.Source = new BitmapImage(new Uri(currentWord.ImageUrl, UriKind.RelativeOrAbsolute));
         }
 
         // Generate word button
@@ -102,10 +122,10 @@ namespace SayTheC
         // Play sound button
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(currentWord))
+            if (currentWord != null && !string.IsNullOrWhiteSpace(currentWord.Word))
             {
                 synth.Rate = -2;
-                synth.SpeakAsync(currentWord);
+                synth.SpeakAsync(currentWord.Word);
             }
             else
             {
@@ -113,11 +133,13 @@ namespace SayTheC
             }
         }
 
+        // Click to show info popup
         private void Inst_Click(object sender, RoutedEventArgs e)
         {
             infoPopup.Visibility = Visibility.Visible;
         }
 
+        // Hide info popup on mouse down
         private void Info_MouseDown(object sender, MouseButtonEventArgs e)
         {
             infoPopup.Visibility = Visibility.Hidden;

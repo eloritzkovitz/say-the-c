@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Database\words.db" />
     <None Remove="Icons\favicon.ico" />
     <None Remove="Icons\icon.ico" />
     <None Remove="Icons\Instructions.png" />
@@ -29,6 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Database\words.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Icons\favicon.ico" />
     <Resource Include="Icons\Instructions.png" />
     <Resource Include="Icons\Sound.png" />
@@ -36,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.8" />
     <PackageReference Include="System.Speech" Version="9.0.4" />
   </ItemGroup>
 

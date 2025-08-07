@@ -30,7 +30,7 @@
 
 ### Prerequisites
 - Windows
-- Visual Studio with .NET Desktop Development installed
+- Visual Studio with .NET 9.0.0 installed
 
 ### Running the App
 
@@ -39,6 +39,17 @@
 2. Open `SayTheC.sln` in Visual Studio
 
 3. Build and run the project
+
+## Customizing Words and Images
+
+- The `Database/words.db` file contains the word list and image paths.
+- Place your word images in the `Images/` folder, or provide the image URL.
+- Update the database to reference new images as needed.
+
+## Distribution
+
+You can download the latest release as a zip file.  
+Extract all files and run `SayTheC.exe`.
 
 ## Project Structure
 

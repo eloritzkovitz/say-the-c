@@ -24,7 +24,7 @@ namespace SayTheC
         };
 
         private readonly int[] map = new int[12];
-        private string currentWord;
+        private string currentWord = string.Empty;
         private readonly Random r = new Random();
         SpeechSynthesizer synth = new SpeechSynthesizer();
 

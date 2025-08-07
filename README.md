@@ -4,10 +4,12 @@
 
 ## Features
 
-- **Random Word Generator**: Shows a random word from the list, containing the letter "C"
+- **Random Word Generator**: Shows a random word from a database, containing the letter "C"
 - **Speech Support**: Reads the selected word aloud using built-in speech synthesis
 - **Visual Highlighting**: Colors the "C" sound based on soft (`Cyan`) or hard (`Red`) pronunciation
 - **Instructions Popup**: Displays a guide on how to use the app
+- **MVVM Architecture**: Clean separation of UI and logic using the MVVM pattern
+- **SQLite Database**: Words and image paths are loaded from a local SQLite database
   
 ## How It Works
 
@@ -20,6 +22,8 @@
 ## Technology Stack
 
 - WPF (.NET)
+- MVVM
+- SQLite (via `Microsoft.Data.Sqlite`)
 - System.Speech.Synthesis
 
 ## How to Run
@@ -35,3 +39,23 @@
 2. Open `SayTheC.sln` in Visual Studio
 
 3. Build and run the project
+
+## Project Structure
+
+```
+SayTheC/
+├── App.xaml                  # Application definition
+├── App.xaml.cs               # Application startup logic
+├── AssemblyInfo.cs           # Assembly metadata
+├── MainWindow.xaml           # Main WPF window UI
+├── MainWindow.xaml.cs        # Main window code-behind (UI logic only)
+├── SayTheC.csproj            # Project file
+├── Converters/               # Value converters (e.g., BooleanToVisibilityConverter.cs)
+├── Data/                     # Data access layer
+├── Database/                 # SQLite database file
+├── Icons/                    # App icons
+├── Images/                   # Word images referenced by the database 
+├── Models/                   # Data models
+├── ViewModels/               # MVVM ViewModels
+└── README.md                 # Project documentation
+```

@@ -40,12 +40,24 @@ namespace SayTheC
                 var repo = new WordRepository(dbPath);
                 words = repo.GetAllWords();
                 map = new int[words.Count];
+
+                // If no words are loaded, show error and disable controls
+                if (words.Count == 0)
+                {
+                    MessageBox.Show("No words found in the database. Please check your database file.", "No Words", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    DisableControls();
+                }
+                else
+                {
+                    EnableControls();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Failed to load words from database:\n" + ex.Message, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 words = new List<WordEntry>();
-                map = [];
+                map = new int[0];
+                DisableControls();
             }
         }
 
@@ -77,7 +89,7 @@ namespace SayTheC
         }
 
         // Apply visual changes
-        public void ApplyVisuals()
+        public void UpdateWordDisplay()
         {
             txt.Inlines.Clear();
             var color = Brushes.Black;
@@ -111,16 +123,32 @@ namespace SayTheC
             img.Source = new BitmapImage(new Uri(currentWord.ImageUrl, UriKind.RelativeOrAbsolute));
         }
 
+        // Disable controls
+        private void DisableControls()
+        {
+            generateButton.IsEnabled = false;
+            playButton.IsEnabled = false;
+            helpButton.IsEnabled = false;
+        }
+
+        // Enable controls
+        private void EnableControls()
+        {
+            generateButton.IsEnabled = true;
+            playButton.IsEnabled = true;
+            helpButton.IsEnabled = true;
+        }
+
         // Generate word button
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void GenerateWord(object sender, RoutedEventArgs e)
         {
             txt.Text = "";
             ChooseWord();
-            ApplyVisuals();
+            UpdateWordDisplay();
         }
 
         // Play sound button
-        private void Play_Click(object sender, RoutedEventArgs e)
+        private void PlaySound(object sender, RoutedEventArgs e)
         {
             if (currentWord != null && !string.IsNullOrWhiteSpace(currentWord.Word))
             {
@@ -131,18 +159,25 @@ namespace SayTheC
             {
                 MessageBox.Show("Please generate a word first!", "No word", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-        }
+        }        
 
         // Click to show info popup
-        private void Inst_Click(object sender, RoutedEventArgs e)
+        private void ShowHelpPopup(object sender, RoutedEventArgs e)
         {
             infoPopup.Visibility = Visibility.Visible;
         }
 
         // Hide info popup on mouse down
-        private void Info_MouseDown(object sender, MouseButtonEventArgs e)
+        private void HideHelpPopup(object sender, MouseButtonEventArgs e)
         {
             infoPopup.Visibility = Visibility.Hidden;
         }
+
+        // Handle window closing event to dispose of the synthesizer
+        protected override void OnClosed(EventArgs e)
+        {
+            synth.Dispose();
+            base.OnClosed(e);
+        }        
     }
 }

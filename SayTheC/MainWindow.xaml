@@ -46,23 +46,23 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Button Name="btn" Content="Generate word!"
+        <Button Name="generateButton" Content="Generate word!"
             HorizontalAlignment="Left"
             FontSize="30"
             Height="81"
             Margin="51,288,0,0"
             VerticalAlignment="Top"
             Width="310"
-            Click="Button_Click"
+            Click="GenerateWord"
             Style="{StaticResource CButton}" />
 
-        <Button Name="play" Content=""
+        <Button Name="playButton" Content=""
             HorizontalAlignment="Left"
             Height="81"
             Margin="400,288,0,0"
             VerticalAlignment="Top"
             Width="118"
-            Click="Play_Click">
+            Click="PlaySound">
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource CButton}">
                     <Setter Property="Background" Value="#FFB14040"/>
@@ -93,13 +93,13 @@
            Width="50"
            Source="Icons\Sound.png"/>
 
-        <Button x:Name="ins" Content=""
+        <Button x:Name="helpButton" Content=""
             HorizontalAlignment="Left"
             Height="80"
             Margin="633,288,0,0"
             VerticalAlignment="Top"
             Width="118"
-            Click="Inst_Click">
+            Click="ShowHelpPopup">
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource CButton}">
                     <Setter Property="Background" Value="#FF80C3DA"/>
@@ -138,7 +138,7 @@
 
         <Grid Name="infoPopup"
           Visibility="Hidden"
-          MouseDown="Info_MouseDown"
+          MouseDown="HideHelpPopup"
           Height="400"
           Width="750">
             <Rectangle HorizontalAlignment="Center"

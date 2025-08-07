@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SayTheC"
+        xmlns:conv="clr-namespace:Converters"
         mc:Ignorable="d"
         Title="Say the C" Height="450" Width="800" Icon="\Icons\favicon.ico">
     <Window.Resources>
+        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <Style x:Key="CButton" TargetType="Button">
             <Setter Property="Background" Value="#FF5A9BD5"/>
             <Setter Property="Foreground" Value="White"/>
@@ -47,22 +49,22 @@
     </Window.Resources>
     <Grid>
         <Button Name="generateButton" Content="Generate word!"
+            Command="{Binding GenerateWordCommand}"
             HorizontalAlignment="Left"
             FontSize="30"
             Height="81"
             Margin="51,288,0,0"
             VerticalAlignment="Top"
-            Width="310"
-            Click="GenerateWord"
+            Width="310"           
             Style="{StaticResource CButton}" />
 
         <Button Name="playButton" Content=""
+            Command="{Binding PlaySoundCommand}"
             HorizontalAlignment="Left"
             Height="81"
             Margin="400,288,0,0"
             VerticalAlignment="Top"
-            Width="118"
-            Click="PlaySound">
+            Width="118">
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource CButton}">
                     <Setter Property="Background" Value="#FFB14040"/>
@@ -76,16 +78,9 @@
                     </Style.Triggers>
                 </Style>
             </Button.Style>
-        </Button>
+        </Button>        
 
-        <Image Name="img"
-           HorizontalAlignment="Left"
-           Height="160"
-           Margin="558,73,0,0"
-           VerticalAlignment="Top"
-           Width="188"/>
-
-        <Image x:Name="btn_img"
+        <Image x:Name="playIcon"
            HorizontalAlignment="Left"
            Height="50"
            Margin="434,304,0,0"
@@ -94,12 +89,12 @@
            Source="Icons\Sound.png"/>
 
         <Button x:Name="helpButton" Content=""
+            Command="{Binding ShowHelpCommand}"
             HorizontalAlignment="Left"
             Height="80"
             Margin="633,288,0,0"
             VerticalAlignment="Top"
-            Width="118"
-            Click="ShowHelpPopup">
+            Width="118">
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource CButton}">
                     <Setter Property="Background" Value="#FF80C3DA"/>
@@ -115,7 +110,7 @@
             </Button.Style>
         </Button>
 
-        <Image x:Name="btn_ins"
+        <Image x:Name="helpIcon"
            HorizontalAlignment="Left"
            Height="50"
            Margin="669,304,0,0"
@@ -123,24 +118,29 @@
            Width="50"
            Source="/Icons/Instructions.png"/>
 
-        <TextBlock Name="txt"
-               HorizontalAlignment="Left"
-               Height="160"
-               Margin="92,73,0,0"
-               VerticalAlignment="Top"
-               Width="450"
-               FontSize="80"
-               IsHitTestVisible="False">
-            <TextBlock.TextEffects>
-                <TextEffect PositionStart="0" PositionCount="2" Foreground="Red"/>
-            </TextBlock.TextEffects>
-        </TextBlock>
+        <TextBlock x:Name="WordTextBlock"
+           FontSize="80"
+           Width="450"
+           Height="160"
+           Margin="92,73,0,0"
+           VerticalAlignment="Top"
+           HorizontalAlignment="Left"
+           IsHitTestVisible="False"/>
 
-        <Grid Name="infoPopup"
-          Visibility="Hidden"
-          MouseDown="HideHelpPopup"
+        <Image Width="188"
+               Height="160"
+               Margin="558,73,0,0"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Source="{Binding WordImage}" />
+
+        <Grid
+          Visibility="{Binding IsHelpVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
           Height="400"
-          Width="750">
+          Width="750">            
+            <Grid.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding HideHelpCommand}" />
+            </Grid.InputBindings>                    
             <Rectangle HorizontalAlignment="Center"
                    Height="400"
                    Stroke="Black"
